@@ -1,0 +1,13 @@
+{
+  "_id": "c22391076_event_001",
+  "type": "event",
+  "customer_id": "c22391076_customer_101",
+  "event_type": "view",
+  "timestamp": "2025-09-19T10:45:00Z",
+  "page": "/products/445",
+  "session_id": "sessxyz23",
+  "meta": {
+    "device": "mobile",
+    "referrer": "facebook"
+  }
+}

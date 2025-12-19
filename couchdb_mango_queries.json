@@ -1,0 +1,28 @@
+[
+  {
+    "description": "All events for one customer",
+    "query": {
+      "selector": {
+        "customer_id": "c22391076_customer_102",
+        "type": "event"
+      }
+    }
+  },
+  {
+    "description": "Lookup full customer document by _id",
+    "query": {
+      "selector": {
+        "_id": "c22391076_customer_102"
+      }
+    }
+  },
+  {
+    "description": "All product view events",
+    "query": {
+      "selector": {
+        "type": "event",
+        "event_type": "view"
+      }
+    }
+  }
+]

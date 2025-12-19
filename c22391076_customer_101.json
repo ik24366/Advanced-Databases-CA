@@ -1,0 +1,12 @@
+{
+  "_id": "c22391076_customer_101",
+  "type": "customer",
+  "fullname": "Alice Example",
+  "email": "alice@example.com",
+  "region": "Dublin",
+  "browsing_events": [
+    "c22391076_event_001",
+    "c22391076_event_003"
+  ],
+  "created_at": "2025-08-20"
+}

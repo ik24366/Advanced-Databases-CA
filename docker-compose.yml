@@ -1,0 +1,112 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: adb_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - './init-db/:/docker-entrypoint-initdb.d/'
+    networks:
+      - adb_network
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: adb_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - adb_network
+
+  couchdb:
+    image: couchdb:latest
+    container_name: adb_couchdb
+    restart: unless-stopped
+    ports:
+      - "5984:5984"
+    environment:
+      COUCHDB_USER: ${COUCHDB_USER:-admin}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD:-admin}
+      COUCHDB_DB: ${COUCHDB_DB:-mydb}
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+
+  couchdb2:
+    image: couchdb:latest
+    container_name: adb_couchdb2
+    restart: unless-stopped
+    ports:
+      - "5985:5984"        # second node exposed on 5985 on your host
+    environment:
+      COUCHDB_USER: ${COUCHDB_USER:-admin}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD:-admin}
+      COUCHDB_SECRET: abcsecret123
+    volumes:
+      - couchdb2_data:/opt/couchdb/data
+    networks:
+      - adb_network
+
+# Cassandra node 1 (seed)
+  cassandra1:
+    image: cassandra:latest
+    container_name: c22391076_cassandra1
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=c22391076_cluster
+      - CASSANDRA_SEEDS=c22391076_cassandra1,c22391076_cassandra2
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    volumes:
+      - cassandra1_data:/var/lib/cassandra
+    networks:
+      - adb_network
+
+  # Cassandra node 2
+  cassandra2:
+    image: cassandra:latest
+    container_name: c22391076_cassandra2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=c22391076_cluster
+      - CASSANDRA_SEEDS=c22391076_cassandra1,c22391076_cassandra2
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    volumes:
+      - cassandra2_data:/var/lib/cassandra
+    networks:
+      - adb_network
+    
+      # Cassandra node 3
+  cassandra3:
+    image: cassandra:latest
+    container_name: c22391076_cassandra3
+    environment:
+      - CASSANDRA_CLUSTER_NAME=c22391076_cluster
+      - CASSANDRA_SEEDS=c22391076_cassandra1,c22391076_cassandra2
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    volumes:
+      - cassandra3_data:/var/lib/cassandra
+    networks:
+      - adb_network
+
+networks:
+  adb_network:
+    driver: bridge
+volumes:
+  postgres_data:
+  pgadmin_data:
+  couchdb_data:
+  couchdb2_data:
+  cassandra1_data:
+  cassandra2_data:
+  cassandra3_data:
+  

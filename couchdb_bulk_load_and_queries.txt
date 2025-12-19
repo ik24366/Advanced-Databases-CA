@@ -1,0 +1,24 @@
+
+curl -X POST "http://admin:admin@127.0.0.1:5984/c22391076_couchdb/_bulk_docs" \
+     -H "Content-Type: application/json" \
+     --data-binary @couch_bulk_docs.json
+
+# Run Mango query: all events for one customer
+curl -X POST "http://admin:admin@127.0.0.1:5984/c22391076_couchdb/_find" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "selector": {
+             "customer_id": "c22391076_customer_102",
+             "type": "event"
+           }
+         }'
+
+# Run Mango query: all view events
+curl -X POST "http://admin:admin@127.0.0.1:5984/c22391076_couchdb/_find" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "selector": {
+             "type": "event",
+             "event_type": "view"
+           }
+         }'
