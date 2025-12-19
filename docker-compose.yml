@@ -36,8 +36,11 @@ services:
       COUCHDB_USER: ${COUCHDB_USER:-admin}
       COUCHDB_PASSWORD: ${COUCHDB_PASSWORD:-admin}
       COUCHDB_DB: ${COUCHDB_DB:-mydb}
+      COUCHDB_SECRET: mysecret123
     volumes:
       - couchdb_data:/opt/couchdb/data
+    networks:
+      - adb_network
 
   couchdb2:
     image: couchdb:latest
@@ -48,7 +51,7 @@ services:
     environment:
       COUCHDB_USER: ${COUCHDB_USER:-admin}
       COUCHDB_PASSWORD: ${COUCHDB_PASSWORD:-admin}
-      COUCHDB_SECRET: abcsecret123
+      COUCHDB_SECRET: mysecret123
     volumes:
       - couchdb2_data:/opt/couchdb/data
     networks:
